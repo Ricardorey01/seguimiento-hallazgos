@@ -636,6 +636,33 @@ body.tema-navidad{background:radial-gradient(900px 500px at 105% -10%,rgba(179,1
 .fr-l{border-top:1px solid #334155;padding-top:6px}
 .inf-firmas,.firmas{align-items:flex-end}
 .firma-img{display:block;height:170px;max-width:100%;margin:0 auto 2px;object-fit:contain;position:relative;z-index:1}
+/* ===== Navidad mágica ===== */
+.xmas-only{display:none!important}
+.tema-navidad .xmas-only{display:block!important}
+#nieveCv{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:240}
+.tema-navidad .nieve{display:none!important}
+.luces{position:fixed;left:0;right:0;top:-4px;height:46px;pointer-events:none;z-index:245;overflow:hidden}
+.luces svg{width:100%;height:46px}
+.foco{animation:foco 1.6s infinite ease-in-out}
+@keyframes foco{0%,100%{opacity:1;filter:drop-shadow(0 0 6px currentColor)}50%{opacity:.35;filter:none}}
+.trineo-zona{position:fixed;inset:0;pointer-events:none;z-index:246;overflow:hidden}
+.trineo{position:absolute;left:-520px;width:480px;height:150px;animation:vuela 11s linear forwards}
+.trineo svg{width:100%;height:100%;overflow:visible}
+@keyframes vuela{0%{transform:translate(0,0) rotate(-3deg)}25%{transform:translate(35vw,-40px) rotate(2deg)}50%{transform:translate(70vw,10px) rotate(-2deg)}75%{transform:translate(105vw,-30px) rotate(3deg)}100%{transform:translate(calc(100vw + 1100px),-10px) rotate(0)}}
+.chispa{position:absolute;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle,#FFF6C8,#F2D06B 60%,transparent 70%);animation:chispa 1.4s ease-out forwards}
+@keyframes chispa{to{opacity:0;transform:translate(-40px,30px) scale(.2)}}
+.btn-sonido{position:fixed;right:16px;bottom:16px;z-index:250;width:50px;height:50px;border-radius:50%;border:2px solid rgba(242,208,107,.7);background:linear-gradient(135deg,#B3122E,#145A3E);color:#fff;font-size:22px;box-shadow:0 10px 24px rgba(0,0,0,.3);cursor:pointer}
+.btn-sonido.mudo{filter:grayscale(1);opacity:.75}
+@media(max-width:900px){.btn-sonido{bottom:96px;right:12px;width:44px;height:44px;font-size:19px}.trineo{width:280px;height:88px;left:-320px}.tema-login{top:auto!important;bottom:18px;left:16px;right:auto!important}#login .btn-sonido{bottom:16px}}
+.feliz{font-family:Inter,sans-serif;font-weight:900;font-size:15px;color:#FFE7A0;text-align:center;margin:0 0 10px;letter-spacing:.02em;animation:brillaTxt 2.4s infinite}
+@keyframes brillaTxt{50%{text-shadow:0 0 14px rgba(255,231,160,.9)}}
+.tema-navidad .lg-caja{box-shadow:0 30px 80px rgba(0,0,0,.45),0 0 0 2px rgba(242,208,107,.35),inset 0 1px 0 rgba(255,255,255,.15)}
+.tema-navidad .lg-caja:after{content:"";position:absolute;top:-34px;left:24px;right:24px;height:60px;pointer-events:none;
+  background:radial-gradient(circle at 10% 70%,#E23B4E 9px,transparent 10px),radial-gradient(circle at 30% 85%,#F2D06B 8px,transparent 9px),radial-gradient(circle at 50% 70%,#3FD18A 9px,transparent 10px),radial-gradient(circle at 70% 85%,#5AA9F6 8px,transparent 9px),radial-gradient(circle at 90% 70%,#E23B4E 9px,transparent 10px);animation:cuelga 3s ease-in-out infinite}
+@keyframes cuelga{50%{transform:translateY(4px) rotate(.6deg)}}
+.tema-navidad .lg-titulo span{animation:brillaTxt 3s infinite}
+.tema-navidad .sp-t1 span,.tema-navidad .aux-top h2{text-shadow:0 0 18px rgba(242,208,107,.45)}
+
 @media print{ body.pi .ev-cuerpo{grid-template-columns:1.25fr 1fr!important} body.pi .ev-cab,body.pi .ev-n,body.pi .ev-est{-webkit-print-color-adjust:exact;print-color-adjust:exact} }
 
 @media print{
@@ -656,7 +683,7 @@ body.tema-navidad{background:radial-gradient(900px 500px at 105% -10%,rgba(179,1
 
 @media print{
   body{background:#fff}
-  .no-print,.side,.topbar,.filtros,#splash{display:none!important}
+  .no-print,.side,.topbar,.filtros,#splash,.xmas-only,#nieveCv{display:none!important}
   #vistaCoord{display:block}.main{padding:0}
   .orden{border:none;box-shadow:none;padding:0;max-width:none}
 }
@@ -689,7 +716,7 @@ body.tema-navidad{background:radial-gradient(900px 500px at 105% -10%,rgba(179,1
 <!-- =================== LOGIN =================== -->
 <section id="login" class="oculto">
   <div class="aurora"></div><div class="rejilla-bg"></div><canvas id="particulas"></canvas>
-  <div class="tema-login"><button class="t-indigo" data-t="indigo" title="Índigo IPS" onclick="ponerTema('indigo')" style="background:conic-gradient(#1B1A5C 0 50%,#3E4095 0 75%,#0E8E8A 0)"></button><button data-t="marino" title="Azul marino" onclick="ponerTema('marino')" style="background:conic-gradient(#0A1F44 0 50%,#123A75 0 75%,#C9A227 0)"></button><button data-t="navidad" title="Navideño" onclick="ponerTema('navidad')" style="background:conic-gradient(#0F3D2C 0 50%,#B3122E 0 75%,#D4AF37 0)"></button></div>
+  <div class="tema-login"><button class="t-indigo" data-t="indigo" title="Índigo IPS" onclick="ponerTema('indigo')" style="background:conic-gradient(#1B1A5C 0 50%,#3E4095 0 75%,#0E8E8A 0)"></button><button data-t="marino" title="Azul marino" onclick="ponerTema('marino')" style="background:conic-gradient(#0A1F44 0 50%,#123A75 0 75%,#C9A227 0)"></button><button data-t="navidad" title="Navideño" onclick="ponerTema._click=true;ponerTema('navidad')" style="background:conic-gradient(#0F3D2C 0 50%,#B3122E 0 75%,#D4AF37 0)"></button></div>
   <div class="lg-izq">
     <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
     <div class="lg-logo logo-w"></div>
@@ -710,6 +737,7 @@ body.tema-navidad{background:radial-gradient(900px 500px at 105% -10%,rgba(179,1
   <div class="lg-der">
     <div class="lg-caja">
       <div class="reloj"><div><div id="estadoCon" class="estado-con" style="margin:0 0 10px"><i></i><span>Verificando conexión…</span></div><b id="lgHora">--:--</b></div><small id="lgFecha"></small></div>
+      <div class="xmas-only feliz">🎄 ¡Feliz Navidad, equipo de mantenimiento! 🎁</div>
       <h2 id="lgSaludo">Bienvenido</h2>
       <p class="sub">Seleccione su usuario e ingrese su clave de 4 dígitos.</p>
       <div class="usuarios" id="listaUsuarios"></div>
@@ -753,7 +781,7 @@ body.tema-navidad{background:radial-gradient(900px 500px at 105% -10%,rgba(179,1
     <button class="mbtn" onclick="recargar()" aria-label="Actualizar"><svg class="i"><use href="#i-recargar"/></svg></button></div>
   <div class="velo" id="velo" onclick="menuMovil(false)"></div>
   <aside class="side no-print" id="side">
-    <div class="marca"><span class="emb emb-w"></span><div><b>VIGÍA</b><small>Rondas y bitácora GT · v18</small></div></div>
+    <div class="marca"><span class="emb emb-w"></span><div><b>VIGÍA</b><small>Rondas y bitácora GT · v19</small></div></div>
     <div class="nav-tit">Gestión</div>
     <button class="nav act" data-v="panel" onclick="verTab('panel')"><svg class="i"><use href="#i-panel"/></svg>Panel ejecutivo</button>
     <button class="nav" data-v="tabla" onclick="verTab('tabla')"><svg class="i"><use href="#i-lista"/></svg>Hallazgos</button>
@@ -765,7 +793,7 @@ body.tema-navidad{background:radial-gradient(900px 500px at 105% -10%,rgba(179,1
     <div class="nav-tit">Prioridad</div>
     <div id="sidePri"></div>
     <div class="nav-tit">Tema</div>
-    <div class="temas"><button class="tema-btn t-indigo" data-t="indigo" onclick="ponerTema('indigo')"><i></i>Índigo IPS</button><button class="tema-btn t-marino" data-t="marino" onclick="ponerTema('marino')"><i></i>Azul marino</button><button class="tema-btn t-navidad" data-t="navidad" onclick="ponerTema('navidad')"><i></i>Navideño</button></div>
+    <div class="temas"><button class="tema-btn t-indigo" data-t="indigo" onclick="ponerTema('indigo')"><i></i>Índigo IPS</button><button class="tema-btn t-marino" data-t="marino" onclick="ponerTema('marino')"><i></i>Azul marino</button><button class="tema-btn t-navidad" data-t="navidad" onclick="ponerTema._click=true;ponerTema('navidad')"><i></i>Navideño</button></div>
     <div class="side-pie" style="margin-top:16px"><div class="avatar" style="background:linear-gradient(135deg,#2E75B6,#00A3A1)" id="sideAvatar">RR</div><div><b id="sideNombre">Coordinador</b><small>Coordinador de Mantenimiento</small></div><button onclick="salir()" title="Salir"><svg class="i"><use href="#i-salir"/></svg></button></div>
   </aside>
 
@@ -936,6 +964,10 @@ body.tema-navidad{background:radial-gradient(900px 500px at 105% -10%,rgba(179,1
 </section>
 
 <div class="nieve"></div>
+<canvas id="nieveCv" class="xmas-only"></canvas>
+<div class="luces xmas-only" id="luces"></div>
+<div class="trineo-zona xmas-only" id="trineoZona"></div>
+<button class="xmas-only btn-sonido" id="btnSonido" onclick="toggleSonido()" title="Sonido navideño">🔔</button>
 <div id="modalCont"></div>
 <div id="toast" class="toast oculto"></div>
 
@@ -1041,6 +1073,87 @@ function iniciar(){
   relojLogin(); setInterval(relojLogin, 20000); escribir();
   setTimeout(function(){ $('splash').classList.add('fuera'); $('login').classList.remove('oculto'); particulas(); }, 3300);
 }
+
+/* ======================= NAVIDAD ======================= */
+var XM={on:false, raf:null, timer:null, ctx:null, sonido:true};
+try{ XM.sonido = localStorage.getItem('vigia_sonido')!=='0'; }catch(e){}
+function luces(){
+  var n=Math.ceil(window.innerWidth/46), col=['#E23B4E','#F2D06B','#3FD18A','#5AA9F6','#FF8A3D'], s='<svg viewBox="0 0 '+(n*46)+' 46" preserveAspectRatio="none"><path d="M0 8 '+
+    Array.apply(null,{length:n}).map(function(_,i){ return 'Q '+(i*46+23)+' 30 '+((i+1)*46)+' 8'; }).join(' ')+'" stroke="#1E4D33" stroke-width="2.5" fill="none"/>';
+  for(var i=0;i<n;i++){ var x=i*46+23, c=col[i%col.length];
+    s+='<g class="foco" style="color:'+c+';animation-delay:'+((i%5)*0.3)+'s"><rect x="'+(x-3)+'" y="17" width="6" height="5" rx="1" fill="#2E4A36"/><ellipse cx="'+x+'" cy="28" rx="6" ry="9" fill="'+c+'"/></g>'; }
+  $('luces').innerHTML=s+'</svg>';
+}
+function nieve(){
+  var cv=$('nieveCv'), cx=cv.getContext('2d'), W, Hh, dpr=Math.min(window.devicePixelRatio||1,2), F=[], t=0;
+  function tam(){ W=window.innerWidth; Hh=window.innerHeight; cv.width=W*dpr; cv.height=Hh*dpr; cx.setTransform(dpr,0,0,dpr,0,0); }
+  tam(); window.addEventListener('resize', function(){ if(XM.on){ tam(); luces(); } });
+  var n=Math.min(170, Math.round(W*Hh/9000));
+  for(var i=0;i<n;i++) F.push({x:Math.random()*W, y:Math.random()*Hh, r:Math.random()*3.2+0.8, v:Math.random()*0.9+0.35, f:Math.random()*6.28, o:Math.random()*0.5+0.5});
+  (function cuadro(){
+    if(!XM.on){ cx.clearRect(0,0,W,Hh); return; }
+    t+=0.01; cx.clearRect(0,0,W,Hh); var viento=Math.sin(t*0.7)*0.6;
+    for(var i=0;i<F.length;i++){ var a=F[i]; a.y+=a.v*(0.6+a.r*0.25); a.x+=Math.sin(t*2+a.f)*0.4+viento*a.r*0.25;
+      if(a.y>Hh+6){ a.y=-6; a.x=Math.random()*W; } if(a.x>W+6) a.x=-6; if(a.x<-6) a.x=W+6;
+      cx.beginPath(); cx.arc(a.x,a.y,a.r,0,6.283); cx.fillStyle='rgba(255,255,255,'+a.o+')'; cx.shadowColor='rgba(255,255,255,.8)'; cx.shadowBlur=a.r>2.6?6:0; cx.fill(); }
+    XM.raf=requestAnimationFrame(cuadro);
+  })();
+}
+var SVG_TRINEO='<svg viewBox="0 0 480 150"><defs><linearGradient id="gTr" x1="0" x2="1"><stop offset="0" stop-color="#E23B4E"/><stop offset="1" stop-color="#8E1028"/></linearGradient></defs>'+
+ '<path d="M150 72 C210 60 250 80 300 90" stroke="#C9A227" stroke-width="2.5" fill="none"/><path d="M150 72 C110 74 70 70 40 66" stroke="#C9A227" stroke-width="2.5" fill="none"/>'+
+ // renos
+ [0,95].map(function(dx){ return '<g transform="translate('+(20+dx)+',40)"><ellipse cx="40" cy="38" rx="30" ry="13" fill="#7A4A2A"/><path d="M14 46 l-6 22 M24 48 l-2 22 M54 48 l4 21 M64 44 l8 20" stroke="#5C361E" stroke-width="5" stroke-linecap="round"/>'+
+   '<path d="M64 30 q10 -18 20 -14" stroke="#7A4A2A" stroke-width="10" fill="none" stroke-linecap="round"/><ellipse cx="88" cy="16" rx="10" ry="7" fill="#7A4A2A"/><circle cx="97" cy="17" r="3.5" fill="'+(dx?'#5C361E':'#FF3B3B')+'"/>'+
+   '<path d="M82 9 l-4 -14 M82 1 l-8 -2 M88 9 l6 -13 M92 0 l7 -3" stroke="#D9C09A" stroke-width="2.5" stroke-linecap="round"/><path d="M10 36 q-12 -4 -10 6" stroke="#7A4A2A" stroke-width="5" fill="none"/></g>'; }).join('')+
+ // trineo
+ '<g transform="translate(290,40)"><path d="M0 70 q-14 0 -10 -10 M-8 74 h150 q18 0 22 -14" stroke="#C9A227" stroke-width="5" fill="none" stroke-linecap="round"/>'+
+ '<path d="M10 64 L4 22 q0 -8 10 -8 h60 q40 0 66 -14 l4 10 q-12 20 -20 56 z" fill="url(#gTr)" stroke="#F2D06B" stroke-width="2"/>'+
+ '<rect x="78" y="-6" width="26" height="22" rx="3" fill="#3FD18A"/><rect x="88" y="-6" width="6" height="22" fill="#F2D06B"/><rect x="104" y="-2" width="20" height="18" rx="3" fill="#5AA9F6"/>'+
+ // papá noel
+ '<circle cx="42" cy="-2" r="13" fill="#F6D3B3"/><path d="M28 -6 q14 -26 30 -2 z" fill="#E23B4E"/><circle cx="62" cy="-14" r="5" fill="#fff"/><rect x="26" y="-8" width="32" height="6" rx="3" fill="#fff"/>'+
+ '<path d="M32 4 q10 18 22 0 q-4 14 -11 16 q-8 -2 -11 -16z" fill="#fff"/><path d="M24 14 q18 -8 38 0 l2 26 h-42 z" fill="#E23B4E"/><rect x="24" y="30" width="40" height="5" fill="#1E1E1E"/>'+
+ '<path d="M60 18 q14 -2 22 -16" stroke="#E23B4E" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="82" cy="1" r="4" fill="#F6D3B3"/></g></svg>';
+function pasarTrineo(){
+  if(!XM.on) return;
+  var z=$('trineoZona'), d=document.createElement('div'); d.className='trineo';
+  d.style.top=(60+Math.random()*Math.max(60,window.innerHeight*0.35))+'px'; d.innerHTML=SVG_TRINEO; z.appendChild(d);
+  var ch=setInterval(function(){ var r=d.getBoundingClientRect(); if(!d.parentNode){ clearInterval(ch); return; }
+    var c=document.createElement('span'); c.className='chispa'; c.style.left=(r.left+30+Math.random()*40)+'px'; c.style.top=(r.top+70+Math.random()*30)+'px'; z.appendChild(c); setTimeout(function(){ c.remove(); },1400); },90);
+  sonarCascabeles();
+  setTimeout(function(){ clearInterval(ch); d.remove(); },11200);
+}
+function audioCtx(){ try{ if(!XM.ctx) XM.ctx=new (window.AudioContext||window.webkitAudioContext)(); if(XM.ctx.state==='suspended') XM.ctx.resume(); return XM.ctx; }catch(e){ return null; } }
+function campana(ac, f, t0, dur, vol){
+  [1,2.01,3.02,4.2].forEach(function(m,k){ var o=ac.createOscillator(), g=ac.createGain(); o.type='sine'; o.frequency.value=f*m;
+    g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(vol/(k+1.4),t0+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t0+dur*(k?0.6:1));
+    o.connect(g); g.connect(ac.destination); o.start(t0); o.stop(t0+dur+0.05); });
+}
+function sonarJingle(){
+  if(!XM.sonido) return; var ac=audioCtx(); if(!ac) return;
+  var N={C:523.25,D:587.33,E:659.25,F:698.46,G:783.99}, b=0.21, t=ac.currentTime+0.05;
+  var mel=[['E',1],['E',1],['E',2],['E',1],['E',1],['E',2],['E',1],['G',1],['C',1.5],['D',.5],['E',3],[null,1],
+           ['F',1],['F',1],['F',1.5],['F',.5],['F',1],['E',1],['E',1],['E',.5],['E',.5],['E',1],['D',1],['D',1],['E',1],['D',2],['G',2]];
+  mel.forEach(function(n){ if(n[0]) campana(ac, N[n[0]], t, Math.max(0.5,n[1]*b*2.2), 0.16); t+=n[1]*b; });
+  sonarCascabeles(t-ac.currentTime-1.2);
+}
+function sonarCascabeles(retraso){
+  if(!XM.sonido) return; var ac=audioCtx(); if(!ac) return; var t=ac.currentTime+(retraso>0?retraso:0.02);
+  for(var i=0;i<22;i++){ var tt=t+i*0.11+(i%2?0.03:0);
+    var len=Math.floor(ac.sampleRate*0.06), buf=ac.createBuffer(1,len,ac.sampleRate), d=buf.getChannelData(0);
+    for(var j=0;j<len;j++) d[j]=(Math.random()*2-1)*Math.pow(1-j/len,3);
+    var s=ac.createBufferSource(), hp=ac.createBiquadFilter(), g=ac.createGain(); s.buffer=buf; hp.type='bandpass'; hp.frequency.value=6500+Math.random()*2500; hp.Q.value=3;
+    g.gain.value=0.22*(1-i/26); s.connect(hp); hp.connect(g); g.connect(ac.destination); s.start(tt);
+    campana(ac, 1800+Math.random()*900, tt, 0.18, 0.025); }
+}
+function toggleSonido(){ XM.sonido=!XM.sonido; try{ localStorage.setItem('vigia_sonido', XM.sonido?'1':'0'); }catch(e){} $('btnSonido').classList.toggle('mudo',!XM.sonido); $('btnSonido').textContent=XM.sonido?'🔔':'🔕'; if(XM.sonido) sonarJingle(); toast(XM.sonido?'Sonido navideño activado 🎶':'Sonido navideño apagado'); }
+function navidadOn(conSonido){
+  if(!XM.on){ XM.on=true; luces(); nieve();
+    clearInterval(XM.timer); XM.timer=setInterval(pasarTrineo, 45000+Math.random()*20000); setTimeout(pasarTrineo, 2500); }
+  $('btnSonido').classList.toggle('mudo',!XM.sonido); $('btnSonido').textContent=XM.sonido?'🔔':'🔕';
+  if(conSonido) sonarJingle();
+}
+function navidadOff(){ XM.on=false; clearInterval(XM.timer); cancelAnimationFrame(XM.raf); var z=$('trineoZona'); if(z) z.innerHTML=''; }
+
 /* Temas */
 var TEMAS=['indigo','marino','navidad'];
 function ponerTema(n){
@@ -1049,10 +1162,12 @@ function ponerTema(n){
   var b=document.querySelectorAll('[data-t]'); for(var i=0;i<b.length;i++) b[i].classList.toggle('act', b[i].getAttribute('data-t')===n);
   var m=document.querySelector('meta[name=theme-color]'); if(m) m.setAttribute('content', n==='marino'?'#0A1F44':n==='navidad'?'#0F3D2C':'#1B1A5C');
   try{ localStorage.setItem('vigia_tema', n); }catch(e){}
+  if(n==='navidad') navidadOn(ponerTema._click); else navidadOff(); ponerTema._click=false;
   if(sesion && sesion.rol==='Coordinador' && tabActual==='panel' && !$('vistaCoord').classList.contains('oculto')) render();
 }
-function ciclarTema(){ var a='indigo'; try{ a=localStorage.getItem('vigia_tema')||'indigo'; }catch(e){} ponerTema(TEMAS[(TEMAS.indexOf(a)+1)%TEMAS.length]); }
+function ciclarTema(){ var a='indigo'; try{ a=localStorage.getItem('vigia_tema')||'indigo'; }catch(e){} ponerTema._click=true; ponerTema(TEMAS[(TEMAS.indexOf(a)+1)%TEMAS.length]); }
 (function(){ var n='indigo'; try{ n=localStorage.getItem('vigia_tema')||'indigo'; }catch(e){} ponerTema(n); })();
+document.addEventListener('pointerdown', function(){ if(XM.on && XM.sonido) audioCtx(); }, {once:true});
 function temaActual(){ return document.body.classList.contains('tema-navidad')?'navidad':document.body.classList.contains('tema-marino')?'marino':'indigo'; }
 
 /* Efectos del login */
