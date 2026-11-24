@@ -781,7 +781,7 @@ body.tema-navidad{background:radial-gradient(900px 500px at 105% -10%,rgba(179,1
     <button class="mbtn" onclick="recargar()" aria-label="Actualizar"><svg class="i"><use href="#i-recargar"/></svg></button></div>
   <div class="velo" id="velo" onclick="menuMovil(false)"></div>
   <aside class="side no-print" id="side">
-    <div class="marca"><span class="emb emb-w"></span><div><b>VIGÍA</b><small>Rondas y bitácora GT · v19</small></div></div>
+    <div class="marca"><span class="emb emb-w"></span><div><b>VIGÍA</b><small>Rondas y bitácora GT · v20</small></div></div>
     <div class="nav-tit">Gestión</div>
     <button class="nav act" data-v="panel" onclick="verTab('panel')"><svg class="i"><use href="#i-panel"/></svg>Panel ejecutivo</button>
     <button class="nav" data-v="tabla" onclick="verTab('tabla')"><svg class="i"><use href="#i-lista"/></svg>Hallazgos</button>
@@ -1053,6 +1053,97 @@ function cargarDatos(cb){
 }
 function recargar(){ cargarDatos(function(){ render(); toast('Datos actualizados'); }); }
 
+
+/* ================= REDACTOR TÉCNICO: ortografía y vocabulario de mantenimiento ================= */
+var LT_ = '\\p{L}';
+function PW(w){ return new RegExp('(?<!'+LT_+')(?:'+w+')(?!'+LT_+')','giu'); }
+/* 1) Palabras mal escritas o mal dictadas → forma correcta (se respeta mayúscula inicial) */
+var ORTO = [
+  // vocabulario técnico
+  ['chas(o|os)|chaz(o|os)|chazo|chasos|chaso', function(m){ return /s$/i.test(m)?'chazos':'chazo'; }],
+  ['dr[iy]?[sw]?[ay]?[bwv]?[oa]l[l]?|draiw[oa]l|drai\\s?wall|dry\\s?wall|drywol|drybol|drysbol|drsybol|draybol|drywal', 'drywall'],
+  ['suelo raso|cielo rraso|cielorraso|cielo rasso|cielo razo|sielo raso', 'cielo raso'],
+  ['plafon|plafón', 'plafón'], ['gotiera|goteara', 'gotera'], ['filtrasion|filtracion', 'filtración'],
+  ['huemdad|humeda|húmeda|umedad|húmedad', 'humedad'], ['impermeabilisacion|impermeabilizacion|inpermeabilizacion', 'impermeabilización'],
+  ['resane|rezane|resanar', function(m){ return m.toLowerCase()==='resanar'?'resanar':'resane'; }],
+  ['estuco|estucco|extuco', 'estuco'], ['masilla|macilla|masiya', 'masilla'], ['silicona|cilicona|silikona', 'silicona'],
+  ['tomacorrient[e]?|toma corriente', 'tomacorriente'], ['brake|breiker|breker|braker', 'breaker'], ['luminaria|lumnaria|luminarea', 'luminaria'],
+  ['bombiyo|bonbillo|bombilo', 'bombillo'], ['balastro|balasto', 'balasto'], ['interruptor|interuptor|interructor', 'interruptor'],
+  ['cerradura|serradura|cerraura', 'cerradura'], ['bisagra|visagra|bisaga', 'bisagra'], ['manija|manilla', 'manija'],
+  ['guardian(es)?|guardián|guardianez', function(m){ return /es$|ez$/i.test(m)?'guardianes':'guardián'; }],
+  ['baño|vaño|bano|vano(?= de| del)', 'baño'], ['baños|vaños|banos', 'baños'], ['lavamanos|labamanos|lava manos', 'lavamanos'],
+  ['sanitario|sanitareo|sanitaryo', 'sanitario'], ['tuberia|tubería|tuveria|tubería', 'tubería'], ['desague|desagüe|desaguee', 'desagüe'],
+  ['sifon|sifón|cifon', 'sifón'], ['aire acondisionado|aire acondicionao|aire condicionado', 'aire acondicionado'],
+  ['ventanería|ventaneria', 'ventanería'], ['baldoza|valdosa|baldosa', 'baldosa'], ['guarda escoba|guardaescobas?', 'guardaescoba'],
+  ['media caña|mediacaña|media cana', 'media caña'], ['pintura|pinture|pintra', 'pintura'], ['vinilo|binilo|vinillo', 'vinilo'],
+  ['anticorrosivo|anti corrosivo|anticorosivo', 'anticorrosivo'], ['extintor|extinguidor|estintor|extintor', 'extintor'],
+  ['señalizacion|senalizacion|señalisacion', 'señalización'], ['ascensor|asensor|acensor', 'ascensor'], ['techo|tesho', 'techo'],
+  ['consultorio|consurtorio|consutorio', 'consultorio'], ['odontologia|odontolojía', 'odontología'], ['vacunacion', 'vacunación'],
+  // errores comunes del dictado
+  ['que daron|ke daron|quedaron|kedaron', 'quedaron'], ['que do|ke do|quedo|kedo', 'quedó'],
+  ['per feto|perfeto|perfekto|per fecto', 'perfecto'], ['promediente|proveniente|provemiente|probeniente|prominente(?= del| de la| de)', 'proveniente'],
+  ['sele|cele', 'se le'], ['seles|celes', 'se les'], ['sepin yo|se pin yo|se pinto|sepinto|se pintó', 'se pintó'],
+  ['sepin to|se pinta(?= el| la| los| las)', 'se pintó'],
+  ['utiliso|utilizo|utilisó|utilizó|ultilizo|ultilisó|utilizaso', 'utilizó'], ['utilisaron|ultilizaron|utilizaron', 'utilizaron'],
+  ['corrijio|corrigio|corrigió|corijio|corrijió', 'corrigió'], ['corrijieron|corrigieron|corijieron', 'corrigieron'],
+  ['coloco|colocó|culoco', 'colocó'], ['repararo|reparo(?=[ .,]|$)', 'reparó'], ['cambio(?= el| la| los| las| de)|cambió', 'cambió'],
+  ['arreglo(?= el| la| los| las| de)|arregló', 'arregló'], ['instalo|instaló', 'instaló'], ['limpio(?= el| la| los| las| de)|limpió', 'limpió'],
+  ['reviso|revisó', 'revisó'], ['ajusto|ajustó', 'ajustó'], ['sello(?= el| la| los| las| de| con)|selló', 'selló'], ['resano|resanó', 'resanó'],
+  ['lijo|lijó', 'lijó'], ['fijo(?= el| la| los| las| con)|fijó', 'fijó'], ['retiro(?= el| la| los| las| de)|retiró', 'retiró'],
+  ['aplico|aplicó', 'aplicó'], ['destapo|destapó', 'destapó'], ['soldo|soldó', 'soldó'], ['desmonto|desmontó', 'desmontó'],
+  ['monto(?= el| la| los| las)|montó', 'montó'], ['conecto|conectó', 'conectó'], ['lubrico|lubricó', 'lubricó'], ['termino(?= el| la| de)|terminó', 'terminó'],
+  ['realizo|realizó', 'realizó'], ['verifico|verificó', 'verificó'], ['impermeabilizo|impermeabilizó', 'impermeabilizó'],
+  ['pego(?= el| la| los| las| con)|pegó', 'pegó'], ['quito(?= el| la| los| las)|quitó', 'quitó'], ['puso|pusó', 'puso'],
+  ['venia|venía', 'venía'], ['habia|había', 'había'], ['tambien|tanbien|tamben', 'también'], ['despues|despué', 'después'],
+  ['estava|estaba', 'estaba'], ['hize|hice', 'hice'], ['hiso|hizo', 'hizo'], ['ise|hise', 'hice'],
+  ['hecho(?= silicona| pintura| masilla| agua| aceite| pegante| grasa| lubricante| estuco)|hech[oó](?= el| la)', 'echó'],
+  ['q|ke|k', 'que'], ['x que|x q|por que(?= goteaba| estaba| se| no| tenía| había)', 'porque'], ['xq|porq|porke', 'porque'], ['x(?= el| la| los| las)', 'por'], ['tb|tmb', 'también'], ['pa(?= el| la| que| los)', 'para'],
+  ['ahi|ahí', 'ahí'], ['solo|sólo', 'solo'], ['ya esta|ya está', 'ya está'], ['esta(?= bien| listo| funcionando| perfecto| en buen)', 'está']
+];
+function conCaso_(orig, nuevo){ return /^\p{Lu}/u.test(orig) ? nuevo.charAt(0).toUpperCase()+nuevo.slice(1) : nuevo; }
+function corregirOrtografia(t){
+  t = String(t||'');
+  ORTO.forEach(function(r){ var re = PW(r[0]); t = t.replace(re, function(m){ var n = typeof r[1]==='function' ? r[1](m) : r[1]; return conCaso_(m, n); }); });
+  // "Sele cambiaron" sin punto: si una palabra en mayúscula empieza otra frase tras minúscula, se pone punto
+  t = t.replace(/(\p{Ll})\s+(Se|Luego|Después|Despues|Además|Ademas|Finalmente|Quedó|Quedaron)\b/gu, '$1. $2');
+  return t;
+}
+/* 2) Redacción profesional (impersonal, sin muletillas) */
+var ESTILO = [
+  [/(^|[.]\s+)seguro\s+(y\s+)?/giu, function(m,a,y){ return a+'Se corrigió '+(y?'la novedad y ':''); }],    // "Seguro la gotera" = se curó
+  [PW('ya se corrigieron'), 'se corrigieron'], [PW('ya se'), 'se'],
+  [/\s*,?\s+y\s+(ya\s+)?quedaron\s+(en\s+)?(perfecto estado|bien|buen estado|listos?|funcionando|perfectos?)/giu, ', quedando en perfecto estado'],
+  [/\s*,?\s+y\s+(ya\s+)?qued[oó]\s+(en\s+)?(perfecto estado|buen estado)/giu, ', quedando en perfecto estado'],
+  [PW('se les? cambiaron'), 'se cambiaron'], [PW('se les? cambió'), 'se cambió'], [PW('se les? colocaron|se les? pusieron'), 'se instalaron'],
+  [PW('se le hizo|se les hizo'), 'se realizó'], [PW('se les? echó|se echó|le eché|eché'), 'se aplicó'],
+  [/(?<!\p{L})(los|las|unos|unas|dos|tres|cuatro|cinco|seis|varios|varias)\s+(chazo|guardián|bombillo|tornillo|baldosa|bisagra)(?!\p{L})/giu, function(m,a,w){ return a+' '+({'guardián':'guardianes','chazo':'chazos','bombillo':'bombillos','tornillo':'tornillos','baldosa':'baldosas','bisagra':'bisagras'}[w.toLowerCase()]||w); }],
+  [/\s*,?\s+y\s+(ya\s+)?(qued[oó]|quedaron)\s+(funcionando|operando|trabajando)/giu, ', quedando en correcto funcionamiento'],
+  [/(se (?:cambió|ajustó|reparó|revisó|lubricó) (?:el|la) \p{L}+) a (la|el) /giu, '$1 de $2 '], [PW('le hice|les hice'), 'se realizó'],
+  [/(se repar[oó]|se corrigi[oó]|se sell[oó])\s*,?\s+(ven[ií]a\s+)?proveniente\s+(del?|de la)\s+/giu, '$1; la causa provenía $3 '],
+  [/\bven[ií]a\s+proveniente\b/giu, 'provenía'],
+  [PW('solo se utilizó|solo se utilizaron|solo utilicé|solo se usó|solo se usaron'), 'Se utilizaron'],
+  [PW('se usó|use|usé'), 'se utilizó'],
+  [/\bchazos? de drywall\b/giu, 'chazos para drywall'],
+  [PW('la humedad se reparó'), 'se reparó la humedad'], [PW('la gotera se reparó'), 'se reparó la gotera'],
+  [PW('los guardianes se corrigieron'), 'se corrigió la fijación de los guardianes'],
+  [/\s{2,}/g, ' ']
+];
+function redaccionProfesional(t){
+  t = corregirOrtografia(t);
+  ESTILO.forEach(function(r){ t = t.replace(r[0], r[1]); });
+  t = t.replace(/\s+([,.;])/g,'$1').replace(/([,.;])(?=\p{L})/gu,'$1 ').replace(/\.{2,}/g,'.').trim();
+  return t.split(/(?<=[.!?])\s+/).map(function(o){ o=o.trim(); return o ? o.charAt(0).toUpperCase()+o.slice(1) : ''; })
+          .filter(Boolean).map(function(o){ return /[.!?]$/.test(o)?o:o+'.'; }).join(' ');
+}
+/* 3) Pule un informe ya guardado (también los viejos): solo las líneas que escribió el auxiliar */
+function pulirInforme(inf){
+  if(!inf) return '';
+  return String(inf).replace(/^(Actividad ejecutada|Materiales e insumos):\s*(.*)$/gm, function(m, et, txt){
+    if(/^\[|^No se reportan/.test(txt)) return m;
+    return et+': '+redaccionProfesional(txt);
+  });
+}
+function informeDe(x){ return x._infEditado || pulirInforme(x.informe); }
 
 
 /* ======================= LOGIN ======================= */
@@ -1527,7 +1618,7 @@ function renderVerificar(L){
     return '<div class="ver-card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><span class="id">'+esc(x.id)+'</span> · '+esc(x.sede)+' · '+esc(x.area)+
       '<div style="font-size:16px;font-weight:800;margin-top:4px">'+esc(x.hallazgo)+'</div><div style="color:var(--gris);font-size:12px;margin-top:2px">Reportado por <b>'+esc(x.responsable)+'</b> el '+(fmt(x.fechaReporte)||'—')+'</div></div>'+
       '<span class="pill e-Requiere-verificación" style="align-self:flex-start">Por verificar</span></div>'+
-      (x.informe?'<div class="bloque"><label>Informe técnico</label><div class="caja-inf">'+esc(x.informe)+'</div></div>':'<div class="bloque" style="color:var(--gris)">Sin informe del auxiliar. Verifique en sitio.</div>')+
+      (x.informe?'<div class="bloque"><label>Informe técnico <span style="font-weight:600;color:var(--gris)">· ortografía y redacción ya corregidas. Puede ajustarlo antes de aprobar ✏️</span></label><textarea class="caja-inf" id="inf_'+x.id+'" style="width:100%;min-height:190px;font:inherit;resize:vertical" oninput="porId(\''+x.id+'\')._infEditado=this.value">'+esc(informeDe(x))+'</textarea></div>':'<div class="bloque" style="color:var(--gris)">Sin informe del auxiliar. Verifique en sitio.</div>')+
       bloqueFoto(x)+
       '<div class="acciones"><button class="btn b-verde" onclick="aprobar(\''+x.id+'\')"><svg class="i"><use href="#i-check"/></svg>Aprobar cierre</button><input id="dev_'+x.id+'" placeholder="Motivo de devolución (lo verá el auxiliar)">'+
       '<button class="btn b-rojo" onclick="devolver(\''+x.id+'\')">Devolver</button></div></div>';
@@ -1585,7 +1676,7 @@ function abrirDetalle(id){
     '<div class="bloque"><label>Plazo</label>'+celdaSla(x)+'</div>'+
     '<div class="bloque"><label>Sugerencia de solución</label><div class="caja-sug">'+esc(x.sugerencia||'')+'</div></div>'+
     '<div class="bloque"><label>Evidencia del estado</label>'+esc(x.evidencia||'—')+'</div>'+
-    (x.informe?'<div class="bloque"><label>Informe técnico del auxiliar</label><div class="caja-inf">'+esc(x.informe)+'</div></div>':'')+
+    (x.informe?'<div class="bloque"><label>Informe técnico del auxiliar</label><div class="caja-inf">'+esc(informeDe(x))+'</div></div>':'')+
     ((x.informe||x.foto)?bloqueFoto(x):'')+
     (x.comentario?'<div class="bloque"><label>Comentario del coordinador</label>'+esc(x.comentario)+'</div>':'')+
     '<div class="gestion"><div><label>Responsable</label><div class="fila"><select id="mResp">'+resp.map(function(r){return '<option'+(r===x.responsable?' selected':'')+'>'+r+'</option>';}).join('')+
@@ -1615,7 +1706,7 @@ function bloqueFoto(x){
 }
 function cerrarModal(){ if(chartGrande){ try{ chartGrande.dispose(); }catch(e){} chartGrande=null; } $('modalCont').innerHTML=''; }
 function trasAccion(r, msg){ if(r&&r.ok){ guardarLocal(); enriquecer(); render(); toast(msg); } else toast('No se pudo guardar: '+((r&&r.error)||'error')); }
-function aprobar(id){ var x=porId(id); apiPost({accion:'aprobar',id:id},function(r){ if(r.ok){ x.estado='Cerrado'; x.fechaCierre=new Date().toISOString().slice(0,10); x.evidencia='Cierre verificado por coordinación el '+fmt(x.fechaCierre);} cerrarModal(); trasAccion(r,'Hallazgo '+id+' cerrado'); }); }
+function aprobar(id){ var x=porId(id), inf=x.informe?informeDe(x):''; apiPost({accion:'aprobar',id:id,informe:inf},function(r){ if(r.ok){ if(inf){ x.informe=inf; x._infEditado=''; } x.estado='Cerrado'; x.fechaCierre=new Date().toISOString().slice(0,10); x.evidencia='Cierre verificado por coordinación el '+fmt(x.fechaCierre);} cerrarModal(); trasAccion(r,'Hallazgo '+id+' cerrado'); }); }
 function devolver(id){ var x=porId(id), m=($('dev_'+id)||{}).value||''; apiPost({accion:'devolver',id:id,comentario:m},function(r){ if(r.ok){ x.estado='En proceso'; x.comentario=m; } trasAccion(r,'Devuelto al auxiliar'); }); }
 function reasignar(id){ var x=porId(id), v=$('mResp').value; apiPost({accion:'reasignar',id:id,responsable:v},function(r){ if(r.ok) x.responsable=v; trasAccion(r,'Responsable actualizado'); }); }
 function programar(id){ var x=porId(id), v=$('mFecha').value; apiPost({accion:'programar',id:id,fecha:v},function(r){ if(r.ok){ x.fechaProgramada=v; if(x.estado==='Sin evidencia de cierre') x.estado='Programado'; } trasAccion(r,'Fecha programada'); }); }
@@ -1685,7 +1776,7 @@ function ampliar(btn){
 /* ======================= INFORMES ======================= */
 var INF={modo:'sede', id:null}, chartsInf={};
 function fechaLarga(s){ var d=(s instanceof Date)?s:aFecha(s); if(!d) return '—'; var m=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']; return d.getDate()+' de '+m[d.getMonth()]+' de '+d.getFullYear(); }
-function actividadDe(x){ var m=String(x.informe||'').match(/Actividad ejecutada:\s*([^\n]*)/); return m?m[1]:(x.reporteVoz||''); }
+function actividadDe(x){ var m=String(informeDe(x)||'').match(/Actividad ejecutada:\s*([^\n]*)/); return m?m[1]:(x.reporteVoz||''); }
 var FOTOS={}, FOTOS_PEND={};
 function fotoUrl(x){ if(!x||!x.foto) return ''; if(x.foto.indexOf('data:')===0) return x.foto; var id=idDrive(x.foto); return (id&&FOTOS[id])||''; }
 function limpiarFallidas(){ for(var k in FOTOS){ if(FOTOS[k]==='') delete FOTOS[k]; } }
@@ -1851,7 +1942,7 @@ function renderActa(x){
     '<div><b>Fecha de reporte</b>'+fechaLarga(x.fecha)+'</div><div><b>Veces reportado</b>'+(x.veces||1)+'</div><div><b>Fechas en bitácora</b>'+esc(x.fechas||fmt(x.fecha))+'</div></div>'+
     '<h2>2. GESTIÓN REALIZADA</h2><div class="datos2"><div><b>Responsable</b>'+esc(x.responsable||'—')+'</div><div><b>Fecha de ejecución</b>'+fechaLarga(x.fechaReporte)+'</div><div><b>Fecha de cierre</b>'+(cerr?fechaLarga(x.fechaCierre):'Pendiente')+'</div>'+
     '<div><b>Días de gestión</b>'+x._dias+' días</div><div><b>Plazo según prioridad</b>'+(SLA[x.prioridad]||15)+' días</div><div><b>Cumplimiento de plazo</b>'+(enSla?'<span style="color:#137A4B;font-weight:800">Dentro del plazo</span>':'<span style="color:#B4233A;font-weight:800">Fuera del plazo</span>')+'</div></div>'+
-    '<h2>3. ACTIVIDAD EJECUTADA</h2>'+(x.informe?'<p class="txt" style="white-space:pre-wrap;background:#F4F5FB;border-left:4px solid #3E4095;padding:12px 14px;border-radius:8px">'+esc(x.informe)+'</p>':'<p class="txt">'+esc(x.evidencia||'Sin informe del auxiliar.')+'</p>')+
+    '<h2>3. ACTIVIDAD EJECUTADA</h2>'+(x.informe?'<p class="txt" style="white-space:pre-wrap;background:#F4F5FB;border-left:4px solid #3E4095;padding:12px 14px;border-radius:8px">'+esc(informeDe(x))+'</p>':'<p class="txt">'+esc(x.evidencia||'Sin informe del auxiliar.')+'</p>')+
     '<h2>4. EVIDENCIA FOTOGRÁFICA</h2>'+(f?'<img class="inf-foto" src="'+f+'" alt="Evidencia" onerror="this.outerHTML=\'<p class=txt>Foto disponible en Drive: '+esc(x.foto)+'</p>\'">':'<p class="txt">'+(x.foto?esc(x.foto):'No se adjuntó foto.')+'</p>')+
     (x.foto&&!f?'<div class="no-print" style="background:#FFF4DE;border:1px solid #F5B82E;color:#8A5B00;border-radius:10px;padding:10px 12px;margin:8px 0;font-weight:700">⚠️ La foto no se pudo cargar. Vuelva a abrir el acta.</div>':'')+
     '<h2>5. VERIFICACIÓN</h2><p class="txt">'+(cerr?'La Coordinación de Mantenimiento verificó y recibió a satisfacción la intervención, y declara el hallazgo <b>CERRADO</b> el '+fechaLarga(x.fechaCierre)+'. '+esc(x.evidencia||''):'El hallazgo se encuentra en estado <b>'+esc(x.estado)+'</b>. Pendiente de verificación y cierre por la Coordinación de Mantenimiento.')+'</p>'+
@@ -2060,11 +2151,11 @@ var REGLAS = [
   [/\s{2,}/g, ' ']
 ];
 function tecnificar(t){
-  t = String(t||'').trim(); if(!t) return '';
+  t = corregirOrtografia(String(t||'').trim()); if(!t) return '';
   REGLAS.forEach(function(r){ t = t.replace(r[0], r[1]); });
   t = t.replace(/\s+([,.])/g,'$1').replace(/^[,\s]+/,'').trim();
   var oraciones = t.split(/(?:\.\s+|\s+y\s+luego\s+|\s+despu[eé]s\s+|\s+luego\s+)/i).map(function(o){ o=o.trim(); return o ? o.charAt(0).toUpperCase()+o.slice(1) : ''; }).filter(Boolean);
-  return oraciones.map(function(o){ return /[.!?]$/.test(o)?o:o+'.'; }).join(' ');
+  return redaccionProfesional(oraciones.map(function(o){ return /[.!?]$/.test(o)?o:o+'.'; }).join(' '));
 }
 function textoResultado(r){
   if(r==='Solucionado') return 'La novedad quedó solucionada y el área quedó en condiciones de uso. Se solicita verificación de cierre por parte de la Coordinación de Mantenimiento.';
