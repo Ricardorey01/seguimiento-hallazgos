@@ -277,6 +277,25 @@ table.t tbody tr:hover td{background:#F5F9FE;cursor:pointer}
 .tarea .area{font-size:18px;font-weight:800;margin:8px 0 2px}
 .tarea .etq{font-size:11px;color:var(--gris);font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-top:12px}
 .tarea .txt{font-size:15px;line-height:1.5}
+.logros{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 14px 0}
+.logro{background:#fff;border:1px solid var(--borde);border-radius:18px;padding:14px;box-shadow:var(--sombra)}
+.logro b{display:block;font-size:30px;line-height:1;color:var(--verde,#137A46)}
+.logro span{font-size:13px;font-weight:700;color:var(--gris)}
+.meta{display:block!important;grid-column:1/-1;background:linear-gradient(135deg,#16154A,#3E4095);color:#fff;border:none}
+.meta .barra{height:14px;border-radius:999px;background:rgba(255,255,255,.2);margin:10px 0 6px;overflow:hidden}
+.meta .barra i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#7FF0E2,#2BD49B)}
+.meta .t1{font-size:16px;font-weight:800;display:block}.meta .t2{font-size:14px;opacity:.92;display:block}.meta .t2 b{display:inline;font-size:inherit;color:#FFD27A}
+.btn-foto{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;border-radius:16px;border:2px solid var(--azul);background:#fff;color:var(--azul);font-weight:800;font-size:17px;cursor:pointer;box-sizing:border-box}
+.btn-foto.ok{border-color:#137A46;color:#137A46;background:#EAF7EF}
+#foto{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.aviso-red{margin:12px 14px 0;padding:12px 14px;border-radius:14px;background:#FFF4DE;border:1px solid #F5B82E;color:#7A4B00;font-weight:700;font-size:14px}
+.aviso-inst{margin:12px 14px 0;padding:12px 14px;border-radius:14px;background:#EAF7F4;border:1px solid #9FDCCF;color:#0B5E57;font-size:14px;line-height:1.45}
+.btn-oir{border:1px solid var(--borde);background:#F4F5FB;border-radius:999px;padding:7px 12px;font-weight:800;font-size:13px;color:var(--azul)}
+.antes-despues{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.antes-despues figure{margin:0}.antes-despues img{width:100%;border-radius:12px;display:block;object-fit:cover;max-height:420px}
+.antes-despues figcaption{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
+.cap-antes{color:#B4233A}.cap-despues{color:#137A46}
+.foto-obl{border:2px dashed #B4233A;border-radius:14px;padding:12px}
 .btn-grande{width:100%;border:none;border-radius:16px;padding:16px;font-size:16px;font-weight:800;margin-top:14px;color:#fff;
   background:linear-gradient(135deg,#2E75B6,#00A3A1);box-shadow:0 10px 22px rgba(0,131,127,.25)}
 .reporte{padding:16px}
@@ -781,7 +800,7 @@ body.tema-navidad{background:radial-gradient(900px 500px at 105% -10%,rgba(179,1
     <button class="mbtn" onclick="recargar()" aria-label="Actualizar"><svg class="i"><use href="#i-recargar"/></svg></button></div>
   <div class="velo" id="velo" onclick="menuMovil(false)"></div>
   <aside class="side no-print" id="side">
-    <div class="marca"><span class="emb emb-w"></span><div><b>VIGÍA</b><small>Rondas y bitácora GT · v20</small></div></div>
+    <div class="marca"><span class="emb emb-w"></span><div><b>VIGÍA</b><small>Rondas y bitácora GT · v21</small></div></div>
     <div class="nav-tit">Gestión</div>
     <button class="nav act" data-v="panel" onclick="verTab('panel')"><svg class="i"><use href="#i-panel"/></svg>Panel ejecutivo</button>
     <button class="nav" data-v="tabla" onclick="verTab('tabla')"><svg class="i"><use href="#i-lista"/></svg>Hallazgos</button>
@@ -914,6 +933,9 @@ body.tema-navidad{background:radial-gradient(900px 500px at 105% -10%,rgba(179,1
         <div><b id="auxRep">0</b>Reportadas</div>
       </div>
     </div>
+    <div id="auxAvisoRed" class="aviso-red oculto"></div>
+    <div id="auxLogros" class="logros"></div>
+    <div id="auxInstalar" class="aviso-inst oculto"></div>
     <div class="aux-filtros">
       <button class="act" data-f="pend" onclick="filtroAux('pend')">Por hacer</button>
       <button data-f="urg" onclick="filtroAux('urg')">🔴 Urgentes</button>
@@ -949,7 +971,11 @@ body.tema-navidad{background:radial-gradient(900px 500px at 105% -10%,rgba(179,1
       </div>
     </div>
     <div class="paso">
-      <h3><span class="num">4</span>Foto de cómo quedó <span style="color:var(--gris);font-weight:500;font-size:13px">(opcional)</span></h3>
+      <h3><span class="num">4</span>📸 Foto de cómo quedó</h3>
+      <div id="fotoReq" style="color:#B4233A;font-weight:800;font-size:13px;margin:-4px 0 10px">Obligatoria si quedó solucionado</div>
+      <div id="repAntes"></div>
+      <div style="color:var(--gris);font-size:13px;margin:6px 0 8px">Tómela <b>desde el mismo lugar</b> que la foto del gerente, para que se vea el antes y el después.</div>
+      <label for="foto" class="btn-foto" id="btnFoto">📷 Tomar la foto</label>
       <input type="file" accept="image/*" capture="environment" id="foto" onchange="leerFoto(this)">
       <img id="fotoPrev" class="oculto" style="max-width:100%;border-radius:12px;margin-top:10px">
     </div>
@@ -1038,7 +1064,7 @@ function apiPost(body, cb){
   if(MODO_DEMO){ cb({ok:true, demo:true}); return; }
   body.usuario = sesion.usuario; body.pin = sesion.pin;
   fetch(API_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(body)})
-    .then(function(r){return r.json();}).then(cb).catch(function(e){ cb({ok:false,error:e.message}); });
+    .then(function(r){return r.json();}).then(cb).catch(function(e){ cb({ok:false,error:e.message,red:true}); });
 }
 
 function cargarDatos(cb){
@@ -1687,7 +1713,20 @@ function abrirDetalle(id){
     '</div></div></div>';
 }
 function idDrive(u){ var m=String(u||'').match(/\/d\/([A-Za-z0-9_-]{10,})/)||String(u||'').match(/[?&]id=([A-Za-z0-9_-]{10,})/); return m?m[1]:''; }
+function urlAntes(x){ var s=String(x&&x.fotoAntes||''); if(s.indexOf('data:')===0) return s; var m=s.match(/https?:\/\/\S+/); return m?m[0]:''; }
+function fotoAntesSrc(x){ var u=urlAntes(x); if(!u) return ''; if(u.indexOf('data:')===0) return u; var id=idDrive(u); return (id&&FOTOS[id])||''; }
+function idsFotos(x){ var a=[], i1=idDrive(x&&x.foto), i2=idDrive(urlAntes(x)); if(i1) a.push(i1); if(i2) a.push(i2); return a; }
 function bloqueFoto(x){
+  var u=urlAntes(x); if(!u) return bloqueFotoSolo(x);
+  if(fotosPendientes([x]).length){ cargarFotos([x], function(){ var el=document.getElementById('bad_'+x.id); if(el) el.outerHTML=bloqueFoto(x); }); }
+  var a=fotoAntesSrc(x), d=fotoUrl(x), pend=fotosPendientes([x]).length;
+  var img=function(src,alt){ return src?'<img src="'+src+'" alt="'+alt+'">':'<div style="height:160px;border-radius:12px;background:#F4F5FB;display:flex;align-items:center;justify-content:center;color:var(--gris);font-size:13px;text-align:center;padding:8px">'+(pend?'⏳ Cargando…':alt==='Después'&&!x.foto?'Sin foto del auxiliar':'Foto no disponible')+'</div>'; };
+  return '<div class="bloque" id="bad_'+x.id+'"><label>Antes y después</label><div class="antes-despues">'+
+    '<figure>'+img(a,'Antes')+'<figcaption class="cap-antes">Antes · gerente en turno</figcaption></figure>'+
+    '<figure>'+img(d,'Después')+'<figcaption class="cap-despues">Después · '+esc(x.responsable||'auxiliar')+'</figcaption></figure></div>'+
+    (x.foto&&x.foto.indexOf('http')===0?'<div style="margin-top:8px"><a class="btn b-pri" href="'+esc(x.foto)+'" target="_blank" rel="noopener">📷 Abrir foto en Drive</a></div>':'')+'</div>';
+}
+function bloqueFotoSolo(x){
   if(x.foto && x.foto.indexOf('http')===0 && idDrive(x.foto)){
     var id=idDrive(x.foto), src=FOTOS[id];
     if(src===undefined){ cargarFotos([x], function(){ var el=document.getElementById('bf_'+x.id); if(el) el.outerHTML=bloqueFoto(x); }); }
@@ -1778,12 +1817,18 @@ var INF={modo:'sede', id:null}, chartsInf={};
 function fechaLarga(s){ var d=(s instanceof Date)?s:aFecha(s); if(!d) return '—'; var m=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']; return d.getDate()+' de '+m[d.getMonth()]+' de '+d.getFullYear(); }
 function actividadDe(x){ var m=String(informeDe(x)||'').match(/Actividad ejecutada:\s*([^\n]*)/); return m?m[1]:(x.reporteVoz||''); }
 var FOTOS={}, FOTOS_PEND={};
+function fotoActa(x,f){
+  var a=fotoAntesSrc(x), d=f?'<img src="'+f+'" alt="Evidencia '+x.id+'">':'<div class="ev-sin">'+(x.foto?'📷 Foto no disponible':'Sin foto de evidencia')+'</div>';
+  if(!a) return d;
+  var cap=function(c,t){ return '<div style="font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:'+c+';margin-top:3px">'+t+'</div>'; };
+  return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div><img src="'+a+'" alt="Antes '+x.id+'">'+cap('#B4233A','Antes')+'</div><div>'+d+cap('#137A46','Después')+'</div></div>';
+}
 function fotoUrl(x){ if(!x||!x.foto) return ''; if(x.foto.indexOf('data:')===0) return x.foto; var id=idDrive(x.foto); return (id&&FOTOS[id])||''; }
 function limpiarFallidas(){ for(var k in FOTOS){ if(FOTOS[k]==='') delete FOTOS[k]; } }
-function fotosPendientes(lista){ return lista.filter(function(x){ var id=idDrive(x&&x.foto); return id && FOTOS[id]===undefined; }); }
+function fotosPendientes(lista){ return lista.filter(function(x){ return idsFotos(x).some(function(id){ return FOTOS[id]===undefined; }); }); }
 function cargarFotos(lista, cb){
   if(MODO_DEMO){ cb&&cb(); return; }
-  var ids=[]; lista.forEach(function(x){ var id=idDrive(x&&x.foto); if(id && FOTOS[id]===undefined && !FOTOS_PEND[id] && ids.indexOf(id)<0) ids.push(id); });
+  var ids=[]; lista.forEach(function(x){ idsFotos(x).forEach(function(id){ if(FOTOS[id]===undefined && !FOTOS_PEND[id] && ids.indexOf(id)<0) ids.push(id); }); });
   if(!ids.length){ cb&&cb(); return; }
   ids.forEach(function(i){ FOTOS_PEND[i]=1; });
   var lotes=[]; for(var i=0;i<ids.length;i+=6) lotes.push(ids.slice(i,i+6)); var n=lotes.length;
@@ -1922,7 +1967,7 @@ function renderActaGrupo(L){
         '<div class="ev-cuerpo"><div class="ev-txt"><div class="ev-l">Novedad reportada</div><div>'+esc(x.hallazgo)+'</div>'+
         '<div class="ev-l">Actividad ejecutada</div><div>'+esc(actividadDe(x)||(x._cerrado?'Cierre verificado en sitio por la Coordinación de Mantenimiento.':'Pendiente de intervención.'))+'</div>'+
         '<div class="ev-l">Responsable · fechas</div><div>'+esc(x.responsable||'—')+' · Reporte '+fmt(x.fecha)+(x.fechaReporte?' · Ejecución '+fmt(x.fechaReporte):'')+(x.fechaCierre?' · Cierre '+fmt(x.fechaCierre):'')+(x._cerrado?' · <b>'+x._dias+' días</b>':'')+'</div></div>'+
-        '<div class="ev-foto">'+(f?'<img src="'+f+'" alt="Evidencia '+x.id+'">':'<div class="ev-sin">'+(x.foto?'📷 Foto no disponible':'Sin foto de evidencia')+'</div>')+'</div></div></div>'; }).join('')+
+        '<div class="ev-foto">'+fotoActa(x,f)+'</div></div></div>'; }).join('')+
     '<h2>4. VERIFICACIÓN</h2><p class="txt">La Coordinación de Mantenimiento deja constancia de la gestión realizada sobre '+(rep?'las novedades reportadas en esta '+esc(String(p[2]).toLowerCase()):'los hallazgos relacionados')+'. Las intervenciones fueron ejecutadas por el auxiliar de mantenimiento de la sede o por el contratista asignado, y los hallazgos marcados como <b>Cerrado</b> fueron verificados y recibidos a satisfacción por la Coordinación de Mantenimiento.</p>'+
     '<div class="inf-firmas"><div>'+esc(rep?(AUX_POR_SEDE[p[0]]||''):(s?AUX_POR_SEDE[s]:'Auxiliares de mantenimiento'))+'<br>Ejecutó · Auxiliar de Mantenimiento / Contratista</div><div class="fr">'+firmaRR()+'<div class="fr-l">Ricardo Rodríguez<br>Verificó y recibió a satisfacción · Coordinador de Mantenimiento</div></div></div>'+
     '<div class="inf-pie">Documento generado por VIGÍA · IPS Salud del Caribe S.A.S.</div></div>';
@@ -1943,7 +1988,7 @@ function renderActa(x){
     '<h2>2. GESTIÓN REALIZADA</h2><div class="datos2"><div><b>Responsable</b>'+esc(x.responsable||'—')+'</div><div><b>Fecha de ejecución</b>'+fechaLarga(x.fechaReporte)+'</div><div><b>Fecha de cierre</b>'+(cerr?fechaLarga(x.fechaCierre):'Pendiente')+'</div>'+
     '<div><b>Días de gestión</b>'+x._dias+' días</div><div><b>Plazo según prioridad</b>'+(SLA[x.prioridad]||15)+' días</div><div><b>Cumplimiento de plazo</b>'+(enSla?'<span style="color:#137A4B;font-weight:800">Dentro del plazo</span>':'<span style="color:#B4233A;font-weight:800">Fuera del plazo</span>')+'</div></div>'+
     '<h2>3. ACTIVIDAD EJECUTADA</h2>'+(x.informe?'<p class="txt" style="white-space:pre-wrap;background:#F4F5FB;border-left:4px solid #3E4095;padding:12px 14px;border-radius:8px">'+esc(informeDe(x))+'</p>':'<p class="txt">'+esc(x.evidencia||'Sin informe del auxiliar.')+'</p>')+
-    '<h2>4. EVIDENCIA FOTOGRÁFICA</h2>'+(f?'<img class="inf-foto" src="'+f+'" alt="Evidencia" onerror="this.outerHTML=\'<p class=txt>Foto disponible en Drive: '+esc(x.foto)+'</p>\'">':'<p class="txt">'+(x.foto?esc(x.foto):'No se adjuntó foto.')+'</p>')+
+    '<h2>4. EVIDENCIA FOTOGRÁFICA</h2>'+(fotoAntesSrc(x)?'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px"><div><img class="inf-foto" style="margin:0" src="'+fotoAntesSrc(x)+'" alt="Antes"><p class="txt" style="color:#B4233A;font-weight:800;margin-top:4px">ANTES · reporte del gerente en turno</p></div><div>'+(f?'<img class="inf-foto" style="margin:0" src="'+f+'" alt="Después">':'<p class="txt">Sin foto del después.</p>')+'<p class="txt" style="color:#137A46;font-weight:800;margin-top:4px">DESPUÉS · intervención de mantenimiento</p></div></div>':'')+(fotoAntesSrc(x)?'':(f?'<img class="inf-foto" src="'+f+'" alt="Evidencia" onerror="this.outerHTML=\'<p class=txt>Foto disponible en Drive: '+esc(x.foto)+'</p>\'">':'<p class="txt">'+(x.foto?esc(x.foto):'No se adjuntó foto.')+'</p>'))+
     (x.foto&&!f?'<div class="no-print" style="background:#FFF4DE;border:1px solid #F5B82E;color:#8A5B00;border-radius:10px;padding:10px 12px;margin:8px 0;font-weight:700">⚠️ La foto no se pudo cargar. Vuelva a abrir el acta.</div>':'')+
     '<h2>5. VERIFICACIÓN</h2><p class="txt">'+(cerr?'La Coordinación de Mantenimiento verificó y recibió a satisfacción la intervención, y declara el hallazgo <b>CERRADO</b> el '+fechaLarga(x.fechaCierre)+'. '+esc(x.evidencia||''):'El hallazgo se encuentra en estado <b>'+esc(x.estado)+'</b>. Pendiente de verificación y cierre por la Coordinación de Mantenimiento.')+'</p>'+
     (x.comentario?'<p class="txt"><b>Observación del coordinador:</b> '+esc(x.comentario)+'</p>':'')+
@@ -1996,12 +2041,13 @@ function abrirAuxiliar(){
   $('vistaAux').classList.remove('oculto');
   $('auxSaludo').textContent = 'Hola, '+sesion.usuario.split(' ')[0];
   $('auxSede').textContent = 'Sede '+sesion.sede+' · '+fmt(new Date().toISOString().slice(0,10));
-  renderAux();
+  renderAux(); procesarCola(); avisoInstalar();
 }
 function misTareas(){ return H.filter(function(x){ return x.responsable===sesion.usuario || (x._auxSede===sesion.usuario && (x.responsable==='Contratista externo'||x.responsable==='Otro proceso')); }); }
 function filtroAux(f){ filtroAuxActual=f; var b=document.querySelectorAll('.aux-filtros button'); for(var i=0;i<b.length;i++) b[i].classList.toggle('act', b[i].getAttribute('data-f')===f); renderAux(); }
 function renderAux(){
   var M = misTareas(), orden={Alta:0,Media:1,Baja:2};
+  renderLogros(M); avisoRed();
   var pend = M.filter(function(x){ return !x._cerrado && x.estado!=='Requiere verificación'; });
   $('auxPend').textContent = pend.length;
   $('auxUrg').textContent = pend.filter(function(x){return x.prioridad==='Alta';}).length;
@@ -2013,22 +2059,25 @@ function renderAux(){
   $('auxTareas').innerHTML = L.length ? L.map(function(x){
     var externo = x.responsable==='Contratista externo'||x.responsable==='Otro proceso';
     return '<div class="tarea '+x.prioridad+'"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-weight:800;font-size:13px">'+etiquetaPri[x.prioridad]+'</span><span style="color:var(--gris);font-size:12px">'+esc(x.id)+'</span></div>'+
-      '<div class="area">📍 '+esc(x.area)+'</div>'+
+      '<div class="area">'+iconoCat(x.categoria)+' '+esc(x.area)+'</div>'+
+      '<div style="margin-top:6px"><button class="btn-oir" onclick="escucharTarea(\''+x.id+'\')">🔊 Escuchar</button></div>'+
       '<div class="etq">Qué pasa</div><div class="txt">'+esc(x.hallazgo)+'</div>'+
       '<div class="etq">Cómo solucionarlo</div><div class="txt caja-sug" style="margin-top:4px">'+esc(x.sugerencia||'')+'</div>'+
       (externo?'<div class="txt" style="margin-top:8px;color:#7A5A00">Lo hace '+(x.responsable==='Otro proceso'?'otra área':'un contratista')+'. Usted acompaña y verifica.</div>':'')+
       (x.comentario?'<div class="txt" style="margin-top:8px;color:#B42335"><b>Nota del coordinador:</b> '+esc(x.comentario)+'</div>':'')+
-      (x.estado==='Requiere verificación'?'<div class="txt" style="margin-top:10px;color:#5B44D6;font-weight:700">✔ Ya reportada. El coordinador la está revisando.</div>':
+      (enCola(x.id)?'<div class="txt" style="margin-top:10px;color:#8A5B00;font-weight:700">⏳ Reporte guardado en el celular. Se envía solo cuando haya señal.</div>':
+       x.estado==='Requiere verificación'?'<div class="txt" style="margin-top:10px;color:#5B44D6;font-weight:700">✔ Ya reportada. El coordinador la está revisando.</div>':
        x._cerrado?'<div class="txt" style="margin-top:10px;color:#137A46;font-weight:700">✔ Cerrada</div>':
        '<button class="btn-grande" onclick="abrirReporte(\''+x.id+'\')">🎤 Reportar lo que hice</button>')+'</div>';
   }).join('') : '<div class="tarea" style="border-left-color:var(--verde)"><div class="txt">No tiene tareas en esta lista. ¡Buen trabajo!</div></div>';
 }
 function abrirReporte(id){
   repActual = porId(id); resultadoSel=''; fotoB64='';
-  $('txtHecho').value=''; $('txtMat').value=''; $('foto').value=''; $('fotoPrev').classList.add('oculto');
+  $('txtHecho').value=''; $('txtMat').value=''; $('foto').value=''; $('fotoPrev').classList.add('oculto'); marcarFoto(false); $('foto').closest('.paso').classList.remove('foto-obl');
   var b=document.querySelectorAll('#opcResultado button'); for(var i=0;i<b.length;i++) b[i].classList.remove('sel');
-  $('repEncabezado').innerHTML = '<div style="color:var(--gris);font-size:12px">'+esc(repActual.id)+' · '+esc(repActual.sede)+'</div><div class="area" style="font-size:18px;font-weight:800">📍 '+esc(repActual.area)+'</div><div class="txt">'+esc(repActual.hallazgo)+'</div>';
+  $('repEncabezado').innerHTML = '<div style="color:var(--gris);font-size:12px">'+esc(repActual.id)+' · '+esc(repActual.sede)+'</div><div class="area" style="font-size:18px;font-weight:800">'+iconoCat(repActual.categoria)+' '+esc(repActual.area)+'</div><div class="txt">'+esc(repActual.hallazgo)+'</div><div style="margin-top:8px"><button class="btn-oir" onclick="escucharTarea(\''+repActual.id+'\')">🔊 Escuchar la tarea</button></div>';
   $('auxLista').classList.add('oculto'); $('auxReporte').classList.remove('oculto'); window.scrollTo(0,0);
+  mostrarAntes(repActual);
   var hayB = cargarBorrador();
   micEstado('mic1','est1', $('txtHecho').value?'cerrado':'listo'); micEstado('mic2','est2', $('txtMat').value?'cerrado':'listo');
   previsualizar(); if(hayB) toast('Se recuperó el reporte que no se había enviado');
@@ -2071,6 +2120,7 @@ function dictar(campo, micId, estId){
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR){ $(estId).textContent='Este celular no permite dictado aquí. Use el micrófono del teclado 🎤.'; $(campo).focus(); return; }
   if(reconocedor){ dict.detenidoPorUsuario=true; detenerDictado(); return; }
+  if(navigator.onLine===false){ $(estId).textContent='📶 Sin internet el micrófono no funciona. Escriba aquí abajo con el teclado.'; $(campo).focus(); return; }
   if(dict.mic && dict.mic!==micId) micEstado(dict.mic, dict.est, $(dict.campo).value?'cerrado':'listo');
   dict.campo=campo; dict.mic=micId; dict.est=estId; dict.base=$(campo).value; dict.final=''; dict.parcial=''; dict.detenidoPorUsuario=false;
   var r = new SR(); reconocedor = r;
@@ -2123,7 +2173,7 @@ function cargarBorrador(){
   var d=null; try{ d=JSON.parse(localStorage.getItem(claveBorrador())||'null'); }catch(e){}
   if(!d) return false;
   $('txtHecho').value=d.hecho||''; $('txtMat').value=d.mat||''; fotoB64=d.foto||'';
-  if(fotoB64){ $('fotoPrev').src='data:image/jpeg;base64,'+fotoB64; $('fotoPrev').classList.remove('oculto'); }
+  if(fotoB64){ $('fotoPrev').src='data:image/jpeg;base64,'+fotoB64; $('fotoPrev').classList.remove('oculto'); marcarFoto(true); }
   if(d.res){ var b=document.querySelectorAll('#opcResultado button'); for(var i=0;i<b.length;i++) if(b[i].getAttribute('data-r')===d.res){ b[i].classList.add('sel'); resultadoSel=d.res; } }
   return true;
 }
@@ -2133,7 +2183,8 @@ var L_ = '\\p{L}';
 function P(w){ return new RegExp('(?<!'+L_+')(?:'+w+')(?!'+L_+')','giu'); }
 var REGLAS = [
   [P('eh+|este|pues|bueno|o sea|ajá|mire|vea|ya ya'), ''],
-  [/\s*,?\s+y\s+(ya\s+)?(qued[oó]|est[aá])\s+(bien|bueno|funcionando|listo|perfecto)/giu, ', quedando en correcto funcionamiento'],
+  [/\s*,?\s+y\s+(ya\s+)?(qued[oó]|est[aá])\s+funcionando/giu, ', quedando en correcto funcionamiento'],
+  [/\s*,?\s+y\s+(ya\s+)?(qued[oó]|est[aá])\s+(bien|bueno|listo|perfecto)/giu, ', quedando en buen estado'],
   [/\s*,?\s+y\s+ya\s+(funciona|prende|sirve|enciende)/giu, ', quedando en correcto funcionamiento'],
   [P('(ya )?(qued[oó]|est[aá]) (bien|bueno|funcionando|listo|perfecto)'), 'quedó en correcto funcionamiento'],
   [P('ya (funciona|prende|sirve|enciende)'), 'quedó en correcto funcionamiento'],
@@ -2187,7 +2238,7 @@ function leerFoto(inp){
       var c=document.createElement('canvas'); c.width=Math.round(w*k); c.height=Math.round(h*k);
       c.getContext('2d').drawImage(img,0,0,c.width,c.height);
       var url = c.toDataURL('image/jpeg',0.72); fotoB64 = url.split(',')[1];
-      $('fotoPrev').src = url; $('fotoPrev').classList.remove('oculto'); guardarBorrador();
+      $('fotoPrev').src = url; $('fotoPrev').classList.remove('oculto'); marcarFoto(true); $('foto').closest('.paso').classList.remove('foto-obl'); guardarBorrador();
     };
     img.src = rd.result;
   };
@@ -2196,13 +2247,16 @@ function leerFoto(inp){
 function enviarReporte(){
   if(!$('txtHecho').value.trim()){ toast('Cuente qué hizo usando el micrófono'); return; }
   if(!resultadoSel){ toast('Toque una opción en "¿Cómo quedó?"'); return; }
+  if(resultadoSel==='Solucionado' && !fotoB64){ toast('📸 Falta la foto de cómo quedó. Sin foto no se puede cerrar.'); var pf=$('foto').closest('.paso'); pf.classList.add('foto-obl'); pf.scrollIntoView({behavior:'smooth',block:'center'}); return; }
   detenerDictado();
   var x = repActual, informe = redactarInforme(), btn=$('btnEnviar');
   btn.disabled=true; btn.textContent='Enviando…';
-  apiPost({accion:'reportar', id:x.id, reporteVoz:$('txtHecho').value.trim()+($('txtMat').value.trim()?' | Materiales: '+$('txtMat').value.trim():''),
-           informe:informe, resultado:resultadoSel, fotoBase64:fotoB64}, function(r){
+  var datos = {accion:'reportar', id:x.id, reporteVoz:$('txtHecho').value.trim()+($('txtMat').value.trim()?' | Materiales: '+$('txtMat').value.trim():''),
+           informe:informe, resultado:resultadoSel, fotoBase64:fotoB64};
+  apiPost(datos, function(r){
     btn.disabled=false; btn.textContent='Enviar reporte';
-    if(!r.ok){ guardarBorrador(); toast('No se envió ('+(r.error||'sin conexión')+'). Su reporte quedó guardado en el celular: toque Enviar otra vez cuando tenga señal.'); return; }
+    if(!r.ok && esFallaRed(r)){ encolar(datos); borrarBorrador(); toast('📶 Sin señal. Su reporte quedó guardado y se envía solo cuando vuelva la señal.'); cerrarReporte(); return; }
+    if(!r.ok){ guardarBorrador(); toast('No se envió: '+(r.error||'error')+'.'); return; }
     x.informe=informe; x.reporteVoz=$('txtHecho').value; x.resultado=resultadoSel; x.fechaReporte=new Date().toISOString().slice(0,10);
     if(MODO_DEMO && fotoB64) x.foto='data:image/jpeg;base64,'+fotoB64; else if(r.foto) x.foto=r.foto;
     x.estado = resultadoSel==='Solucionado'?'Requiere verificación': resultadoSel==='En proceso'?'En proceso':'En espera de tercero';
@@ -2211,6 +2265,103 @@ function enviarReporte(){
   });
 }
 
+
+
+/* ===================== v21: logros, escuchar, íconos, antes, sin señal ===================== */
+var ICONOS = {'Humedades y filtraciones':'💧','Pintura':'🎨','Puertas y cerraduras':'🚪','Eléctrico e iluminación':'💡','Plomería':'🚰',
+  'Mobiliario':'🪑','Aire acondicionado':'❄️','Seguridad y emergencias':'🧯','Señalización':'🪧','Aseo':'🧹','Pisos y acabados':'🧱',
+  'Estructura y cubiertas':'🏗️','Ascensor':'🛗','Cadena de frío':'🧊','Dotación':'📦','Orden y almacenamiento':'📦','Zonas exteriores':'🌳',
+  'Seguridad electrónica':'📹','Equipo biomédico':'🩺'};
+function iconoCat(c){ return ICONOS[c] || '📍'; }
+
+function mesActual(f){ return String(f||'').slice(0,7) === new Date().toISOString().slice(0,7); }
+function renderLogros(M){
+  var cont = $('auxLogros'); if(!cont) return;
+  var sede = sesion.sede, S = H.filter(function(x){ return x.sede===sede; });
+  var cerrMes = M.filter(function(x){ return x._cerrado && mesActual(x.fechaCierre); }).length;
+  var repMes = M.filter(function(x){ return mesActual(x.fechaReporte); }).length;
+  var resueltos = S.filter(function(x){ return x._cerrado || x.estado==='Requiere verificación'; }).length;
+  var venc = S.filter(function(x){ return x._vencido; }).length;
+  var pct = S.length ? Math.round(100*resueltos/S.length) : 0;
+  var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  cont.innerHTML =
+    '<div class="logro"><b>'+cerrMes+'</b><span>✔ Cerradas por usted en '+meses[new Date().getMonth()]+'</span></div>'+
+    '<div class="logro"><b style="color:var(--azul)">'+repMes+'</b><span>🎤 Reportes enviados este mes</span></div>'+
+    '<div class="logro meta"><div class="t1">🎯 Meta de la sede '+esc(sede)+': cero vencidos</div>'+
+      '<div class="barra"><i style="width:'+pct+'%"></i></div>'+
+      '<div class="t2">'+resueltos+' de '+S.length+' hallazgos resueltos ('+pct+'%) · '+(venc?'<b>'+venc+' vencidos</b> por atender':'¡Sin vencidos! 🎉')+'</div></div>';
+}
+
+function escucharTarea(id){
+  var x = porId(id); if(!x || !window.speechSynthesis){ toast('Este celular no puede leer en voz alta.'); return; }
+  speechSynthesis.cancel();
+  var pr = {Alta:'Urgente.', Media:'Importante.', Baja:'Cuando pueda.'}[x.prioridad] || '';
+  var texto = pr+' En '+x.area+'. Qué pasa: '+x.hallazgo+'. Cómo solucionarlo: '+(x.sugerencia||'revise el sitio y avise al coordinador')+
+              (x.comentario?'. Nota del coordinador: '+x.comentario:'');
+  var u = new SpeechSynthesisUtterance(texto); u.lang='es-CO'; u.rate=0.95;
+  var v = speechSynthesis.getVoices().filter(function(v){ return /^es/i.test(v.lang); });
+  var co = v.filter(function(v){ return /CO|419|MX|US/i.test(v.lang); })[0] || v[0]; if(co) u.voice = co;
+  speechSynthesis.speak(u);
+}
+
+function mostrarAntes(x){
+  var c = $('repAntes'); if(!c) return;
+  if(!urlAntes(x)){ c.innerHTML=''; return; }
+  var pintar = function(){ var a=fotoAntesSrc(x);
+    c.innerHTML = '<div style="font-size:12px;font-weight:800;color:#B4233A;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Así lo encontró el gerente</div>'+
+      (a?'<img src="'+a+'" style="width:100%;border-radius:12px;display:block">':'<div style="color:var(--gris);font-size:13px">⏳ Cargando la foto del gerente…</div>'); };
+  pintar(); if(fotosPendientes([x]).length) cargarFotos([x], pintar);
+}
+
+/* ---- Cola de envío sin señal ---- */
+var COLA_K = 'vigia_cola';
+function leerCola(){ try{ return JSON.parse(localStorage.getItem(COLA_K)||'[]'); }catch(e){ return []; } }
+function guardarCola(c){ try{ localStorage.setItem(COLA_K, JSON.stringify(c)); }catch(e){ toast('El celular está lleno: no se pudo guardar el reporte. Libere espacio.'); } }
+function enCola(id){ return leerCola().some(function(d){ return d.id===id && d.usuario===sesion.usuario; }); }
+function encolar(d){ var c = leerCola().filter(function(o){ return o.id!==d.id; }); d.usuario=sesion.usuario; delete d.pin; d._t=Date.now(); c.push(d); guardarCola(c); renderAux(); }
+function esFallaRed(r){ return navigator.onLine===false || !r || r.red===true; }
+var colaEnviando=false;
+function procesarCola(){
+  if(colaEnviando || navigator.onLine===false || !sesion) return;
+  var c = leerCola().filter(function(d){ return d.usuario===sesion.usuario; }); if(!c.length){ avisoRed(); return; }
+  colaEnviando=true; var d=c[0], copia={}; for(var k in d) if(k!=='_t') copia[k]=d[k];
+  apiPost(copia, function(r){
+    colaEnviando=false;
+    if(r && r.ok){
+      guardarCola(leerCola().filter(function(o){ return !(o.id===d.id && o.usuario===d.usuario); }));
+      var x=porId(d.id); if(x){ x.informe=d.informe; x.resultado=d.resultado; x.fechaReporte=new Date().toISOString().slice(0,10); if(r.foto) x.foto=r.foto;
+        x.estado = d.resultado==='Solucionado'?'Requiere verificación': d.resultado==='En proceso'?'En proceso':'En espera de tercero'; }
+      toast('✅ Se envió el reporte de '+d.id+' que estaba guardado.'); try{ guardarLocal(); enriquecer(); }catch(e){}
+      renderAux(); procesarCola();
+    } else if(r && !esFallaRed(r)){
+      guardarCola(leerCola().filter(function(o){ return !(o.id===d.id && o.usuario===d.usuario); }));
+      toast('⚠ El reporte de '+d.id+' no se aceptó: '+r.error); renderAux();
+    } else avisoRed();
+  });
+}
+function avisoRed(){
+  var el=$('auxAvisoRed'); if(!el || !sesion) return;
+  var n = leerCola().filter(function(d){ return d.usuario===sesion.usuario; }).length;
+  if(navigator.onLine===false){ el.textContent='📶 Está sin señal. Puede seguir trabajando: los reportes se guardan y se envían solos.'+(n?' ('+n+' esperando)':''); el.classList.remove('oculto'); }
+  else if(n){ el.textContent='⏳ '+n+' reporte(s) guardado(s) en el celular. Enviando…'; el.classList.remove('oculto'); }
+  else el.classList.add('oculto');
+}
+window.addEventListener('online', function(){ avisoRed(); procesarCola(); });
+window.addEventListener('offline', avisoRed);
+setInterval(procesarCola, 60000);
+
+/* ---- Poner VIGÍA en la pantalla del celular ---- */
+function avisoInstalar(){
+  var el=$('auxInstalar'); if(!el) return;
+  var instalada = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+  var visto; try{ visto = localStorage.getItem('vigia_inst_ok'); }catch(e){}
+  if(instalada || visto){ el.classList.add('oculto'); return; }
+  el.innerHTML = '<b>📲 Ponga VIGÍA en la pantalla de su celular</b><br>En Chrome toque los <b>tres puntos ⋮</b> (arriba a la derecha) › <b>Agregar a la pantalla principal</b> › <b>Agregar</b>. Así la abre como cualquier aplicación.'+
+    '<div style="margin-top:8px"><button class="btn-oir" onclick="try{localStorage.setItem(\'vigia_inst_ok\',1)}catch(e){};avisoInstalar()">Ya lo hice ✔</button></div>';
+  el.classList.remove('oculto');
+}
+
+function marcarFoto(ok){ var b=$('btnFoto'); if(!b) return; b.classList.toggle('ok',!!ok); b.textContent = ok ? '✅ Foto lista · tocar para cambiarla' : '📷 Tomar la foto'; }
 
 
 iniciar();
