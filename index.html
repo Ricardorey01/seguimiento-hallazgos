@@ -800,7 +800,7 @@ body.tema-navidad{background:radial-gradient(900px 500px at 105% -10%,rgba(179,1
     <button class="mbtn" onclick="recargar()" aria-label="Actualizar"><svg class="i"><use href="#i-recargar"/></svg></button></div>
   <div class="velo" id="velo" onclick="menuMovil(false)"></div>
   <aside class="side no-print" id="side">
-    <div class="marca"><span class="emb emb-w"></span><div><b>VIGÍA</b><small>Rondas y bitácora GT · v21.1</small></div></div>
+    <div class="marca"><span class="emb emb-w"></span><div><b>VIGÍA</b><small>Rondas y bitácora GT · v21.2</small></div></div>
     <div class="nav-tit">Gestión</div>
     <button class="nav act" data-v="panel" onclick="verTab('panel')"><svg class="i"><use href="#i-panel"/></svg>Panel ejecutivo</button>
     <button class="nav" data-v="tabla" onclick="verTab('tabla')"><svg class="i"><use href="#i-lista"/></svg>Hallazgos</button>
@@ -1640,7 +1640,9 @@ function renderTabla(F){
   $('conteoTabla').textContent = F.length+' hallazgos · '+cuenta(F,function(x){return x._vencido;})+' vencidos';
 }
 function renderVerificar(L){
-  $('listaVerificar').innerHTML = L.length ? L.map(function(x){
+  $('listaVerificar').innerHTML = L.length ? L.map(function(x){ try{ return tarjetaVer(x); }catch(e){ console.error(e); return '<div class="ver-card"><span class="id">'+esc(x.id)+'</span> · '+esc(x.sede)+' · no se pudo mostrar este reporte ('+esc(e.message)+')</div>'; } }).join('') : VER_VACIO;
+}
+function tarjetaVer(x){ return (function(x){
     return '<div class="ver-card"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><span class="id">'+esc(x.id)+'</span> · '+esc(x.sede)+' · '+esc(x.area)+
       '<div style="font-size:16px;font-weight:800;margin-top:4px">'+esc(x.hallazgo)+'</div><div style="color:var(--gris);font-size:12px;margin-top:2px">Reportado por <b>'+esc(x.responsable)+'</b> el '+(fmt(x.fechaReporte)||'—')+'</div></div>'+
       '<span class="pill e-Requiere-verificación" style="align-self:flex-start">Por verificar</span></div>'+
@@ -1648,8 +1650,8 @@ function renderVerificar(L){
       bloqueFoto(x)+
       '<div class="acciones"><button class="btn b-verde" onclick="aprobar(\''+x.id+'\')"><svg class="i"><use href="#i-check"/></svg>Aprobar cierre</button><input id="dev_'+x.id+'" placeholder="Motivo de devolución (lo verá el auxiliar)">'+
       '<button class="btn b-rojo" onclick="devolver(\''+x.id+'\')">Devolver</button></div></div>';
-  }).join('') : '<div class="card vacio"><svg class="i"><use href="#i-check"/></svg><div style="font-weight:700;color:var(--texto)">Todo al día</div><div>Cuando un auxiliar reporte "Quedó solucionado", aparecerá aquí para que usted apruebe el cierre.</div></div>';
-}
+  })(x); }
+var VER_VACIO = '<div class="card vacio"><svg class="i"><use href="#i-check"/></svg><div style="font-weight:700;color:var(--texto)">Todo al día</div><div>Cuando un auxiliar reporte "Quedó solucionado", aparecerá aquí para que usted apruebe el cierre.</div></div>';
 function menuMovil(on){ var s=$('side'), v=$('velo'); if(!s) return; s.classList.toggle('abierta', !!on); v.classList.toggle('on', !!on); }
 function toggleFiltros(){ $('barraFiltros').classList.toggle('m-abierto'); }
 var CFG = {}, PICK = {};
@@ -1718,7 +1720,7 @@ function fotoAntesSrc(x){ var u=urlAntes(x); if(!u) return ''; if(u.indexOf('dat
 function idsFotos(x){ var a=[], i1=idDrive(x&&x.foto), i2=idDrive(urlAntes(x)); if(i1) a.push(i1); if(i2) a.push(i2); return a; }
 function bloqueFoto(x){
   var u=urlAntes(x); if(!u) return bloqueFotoSolo(x);
-  if(fotosPendientes([x]).length){ cargarFotos([x], function(){ var el=document.getElementById('bad_'+x.id); if(el) el.outerHTML=bloqueFoto(x); }); }
+  if(porPedir(x)){ cargarFotos([x], function(){ var el=document.getElementById('bad_'+x.id); if(el) el.outerHTML=bloqueFoto(x); }); }
   var a=fotoAntesSrc(x), d=fotoUrl(x), pend=fotosPendientes([x]).length;
   var img=function(src,alt){ return src?'<img src="'+src+'" alt="'+alt+'">':'<div style="height:160px;border-radius:12px;background:#F4F5FB;display:flex;align-items:center;justify-content:center;color:var(--gris);font-size:13px;text-align:center;padding:8px">'+(pend?'⏳ Cargando…':alt==='Después'&&!x.foto?'Sin foto del auxiliar':'Foto no disponible')+'</div>'; };
   return '<div class="bloque" id="bad_'+x.id+'"><label>Antes y después</label><div class="antes-despues">'+
@@ -1729,7 +1731,7 @@ function bloqueFoto(x){
 function bloqueFotoSolo(x){
   if(x.foto && x.foto.indexOf('http')===0 && idDrive(x.foto)){
     var id=idDrive(x.foto), src=FOTOS[id];
-    if(src===undefined){ cargarFotos([x], function(){ var el=document.getElementById('bf_'+x.id); if(el) el.outerHTML=bloqueFoto(x); }); }
+    if(src===undefined && porPedir(x)){ cargarFotos([x], function(){ var el=document.getElementById('bf_'+x.id); if(el) el.outerHTML=bloqueFoto(x); }); }
     return '<div class="bloque" id="bf_'+x.id+'"><label>Evidencia fotográfica</label>'+
       (src?'<a href="'+esc(x.foto)+'" target="_blank" rel="noopener"><img src="'+src+'" class="foto-ev" alt="Foto del reporte"></a>':
        src===''?'<div style="color:#8A5B00">No se pudo cargar la foto.</div>':'<div style="color:var(--gris)">⏳ Cargando foto…</div>')+
@@ -1825,15 +1827,23 @@ function fotoActa(x,f){
 }
 function fotoUrl(x){ if(!x||!x.foto) return ''; if(x.foto.indexOf('data:')===0) return x.foto; var id=idDrive(x.foto); return (id&&FOTOS[id])||''; }
 function limpiarFallidas(){ for(var k in FOTOS){ if(FOTOS[k]==='') delete FOTOS[k]; } }
+function refrescarFotos(){
+  var els=document.querySelectorAll('[id^="bf_"],[id^="bad_"]');
+  for(var i=0;i<els.length;i++){ var el=els[i], x=porId(el.id.replace(/^(bf_|bad_)/,'')); if(!x) continue;
+    if(idsFotos(x).every(function(id){ return FOTOS[id]!==undefined; }) && /Cargando/.test(el.textContent)) el.outerHTML=bloqueFoto(x); }
+}
+function porPedir(x){ return idsFotos(x).some(function(id){ return FOTOS[id]===undefined && !FOTOS_PEND[id]; }); }
 function fotosPendientes(lista){ return lista.filter(function(x){ return idsFotos(x).some(function(id){ return FOTOS[id]===undefined; }); }); }
 function cargarFotos(lista, cb){
-  if(MODO_DEMO){ cb&&cb(); return; }
+  if(MODO_DEMO){ lista.forEach(function(x){ idsFotos(x).forEach(function(id){ if(FOTOS[id]===undefined) FOTOS[id]=''; }); }); if(cb) setTimeout(cb,0); return; }
   var ids=[]; lista.forEach(function(x){ idsFotos(x).forEach(function(id){ if(FOTOS[id]===undefined && !FOTOS_PEND[id] && ids.indexOf(id)<0) ids.push(id); }); });
-  if(!ids.length){ cb&&cb(); return; }
+  if(!ids.length){   // ya se están cargando: esperar a que terminen (sin volver a pedirlas)
+    if(cb){ var esperar=function(){ var p=lista.some(function(x){ return idsFotos(x).some(function(id){ return FOTOS_PEND[id]; }); }); if(p) setTimeout(esperar,300); else cb(); }; setTimeout(esperar,300); }
+    return; }
   ids.forEach(function(i){ FOTOS_PEND[i]=1; });
   var lotes=[]; for(var i=0;i<ids.length;i+=6) lotes.push(ids.slice(i,i+6)); var n=lotes.length;
   lotes.forEach(function(l){ apiPost({accion:'fotos', ids:l}, function(r){
-    l.forEach(function(id){ FOTOS[id]=(r&&r.ok&&r.fotos&&r.fotos[id])||''; delete FOTOS_PEND[id]; });
+    l.forEach(function(id){ FOTOS[id]=(r&&r.ok&&r.fotos&&r.fotos[id])||''; delete FOTOS_PEND[id]; }); setTimeout(refrescarFotos,0);
     if(--n===0 && cb) cb(); }); });
 }
 function verActa(id){ limpiarFallidas(); cerrarModal(); INF.modo='uno'; INF.id=id; verTab('informes'); }
