@@ -800,7 +800,7 @@ body.tema-navidad{background:radial-gradient(900px 500px at 105% -10%,rgba(179,1
     <button class="mbtn" onclick="recargar()" aria-label="Actualizar"><svg class="i"><use href="#i-recargar"/></svg></button></div>
   <div class="velo" id="velo" onclick="menuMovil(false)"></div>
   <aside class="side no-print" id="side">
-    <div class="marca"><span class="emb emb-w"></span><div><b>VIGÍA</b><small>Rondas y bitácora GT · v21</small></div></div>
+    <div class="marca"><span class="emb emb-w"></span><div><b>VIGÍA</b><small>Rondas y bitácora GT · v21.1</small></div></div>
     <div class="nav-tit">Gestión</div>
     <button class="nav act" data-v="panel" onclick="verTab('panel')"><svg class="i"><use href="#i-panel"/></svg>Panel ejecutivo</button>
     <button class="nav" data-v="tabla" onclick="verTab('tabla')"><svg class="i"><use href="#i-lista"/></svg>Hallazgos</button>
@@ -1452,7 +1452,7 @@ function render(){
   if($('mDot')) $('mDot').classList.toggle('oculto', !$('chips').innerHTML);
   if(tabActual==='panel') renderPanel(F);
   if(tabActual==='tabla') renderTabla(F);
-  if(tabActual==='verificar') renderVerificar(porVer);
+  if(tabActual==='verificar') renderVerificar(filtrados('estado').filter(function(x){return x.estado==='Requiere verificación';}));   // respeta sede, prioridad, responsable y búsqueda
   if(tabActual==='ordenes') renderOrden();
   if(tabActual==='informes') renderInforme();
 }
